@@ -43,6 +43,8 @@ class CoffeMachines(models.Model):
 
     class Meta:
         verbose_name_plural = "Coffe Machines"
+        ordering = ['id']
+
 
     def __str__(self):
         return f"{self.id.upper()} - {self.product_type}, {self.model_type} { self.water_line_compatible and ', water line compatible'}"
@@ -57,6 +59,7 @@ class CoffePods(models.Model):
 
     class Meta:
         verbose_name_plural = "Coffe Pods"
+        ordering = ['id']
 
 
     def __str__(self):
