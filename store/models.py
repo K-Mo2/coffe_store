@@ -1,6 +1,6 @@
 from tabnanny import verbose
 from django.db import models
-
+from django.core.validators import MinValueValidator
 # Create your models here.
 
 machines_product_type_list = (
@@ -35,6 +35,8 @@ model_type_list = (
     ("2","premium model"),
     ("3","deluxe model"),
 )
+
+
 class CoffeMachines(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     product_type = models.CharField(max_length=50,choices=machines_product_type_list)
@@ -56,11 +58,22 @@ class CoffePods(models.Model):
     product_type = models.CharField(max_length=50, choices=pods_product_type_list)
     coffe_flavor = models.CharField(max_length=50, choices=flavors_list)
     pack_size = models.CharField(max_length=50, choices=pack_size_list)
-
     class Meta:
         verbose_name_plural = "Coffe Pods"
         ordering = ['id']
 
 
     def __str__(self):
-        return f"{self.id.upper()} - {self.product_type}, {self.pack_size}, {self.coffe_flavor}"
+        return f"{self.id.upper()} - {self.product_type}, {self.pack_size}, {self.coffe_flavor} {self.capacity} KG - {self.quantity} {'Pack' if self.quantity <= 1 else 'Packs'}"
+
+
+
+class CoffeBeans(models.Model):
+    capacity  = models.FloatField(validators=[MinValueValidator(0.0)], default=100)
+    quantity  = models.PositiveIntegerField(default=100)
+
+    class Meta:
+        verbose_name_plural = 'Coffe Beans'
+
+    def __str__(self):
+        return f"{self.capacity} KG - {self.quantity} Pack"
