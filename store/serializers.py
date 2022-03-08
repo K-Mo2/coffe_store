@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CoffeMachines, CoffePods
+from .models import CoffeMachines, CoffePods, CoffeBeans
 
 class CoffeMachinesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,6 +10,12 @@ class CoffeMachinesSerializer(serializers.ModelSerializer):
 class CoffePodsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoffePods
+        fields = "__all__" 
+
+
+class CoffeBeansSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CoffeBeans
         fields = "__all__" 
 
 

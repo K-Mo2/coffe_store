@@ -1,3 +1,4 @@
+from numbers import Number
 from tabnanny import verbose
 from django.db import models
 from django.core.validators import MinValueValidator
@@ -64,16 +65,27 @@ class CoffePods(models.Model):
 
 
     def __str__(self):
-        return f"{self.id.upper()} - {self.product_type}, {self.pack_size}, {self.coffe_flavor} {self.capacity} KG - {self.quantity} {'Pack' if self.quantity <= 1 else 'Packs'}"
+        return f"{self.id.upper()} - {self.product_type}, {self.pack_size}, {self.coffe_flavor}"
 
 
 
 class CoffeBeans(models.Model):
     capacity  = models.FloatField(validators=[MinValueValidator(0.0)], default=100)
-    quantity  = models.PositiveIntegerField(default=100)
+    quantity  = models.PositiveIntegerField(default=200)
 
     class Meta:
         verbose_name_plural = 'Coffe Beans'
 
     def __str__(self):
         return f"{self.capacity} KG - {self.quantity} Pack"
+
+    
+    def reduce_coffe_beans(self, pods_pack_size):
+        
+        if pods_pack_size.isdigit():
+            self.capacity -= float(pods_pack_size) / 2
+            self.quantity -= int(pods_pack_size)
+            self.save() 
+
+        else:
+            raise Exception("The input has to be a valid number")

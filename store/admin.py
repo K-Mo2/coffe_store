@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import CoffeMachines, CoffePods, CoffeBeans
-# Register your models here.
 class CoffeMachinesAdmin(admin.ModelAdmin):
     list_filter = ('id','product_type', 'water_line_compatible', 'model_type')
     list_display = ('id','product_type', 'water_line_compatible', 'model_type')

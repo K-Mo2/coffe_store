@@ -21,3 +21,7 @@ Create coffe-beans stock of capacity in KG and quantity in number of packs (size
 whenever any of the stocks decreases the other one decreases as well
 
 create a task using RabbitMQ and Celery to reset the stock every period of time
+
+How to delete a model instance when its value is zero?
+
+try the classic viewsets

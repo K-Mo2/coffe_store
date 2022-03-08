@@ -1,10 +1,14 @@
 from ast import Raise
 from django.shortcuts import render
 from django.http import HttpResponse
-from .serializers import CoffeMachinesSerializer, CoffePodsSerializer
-from rest_framework import viewsets, mixins
-from .models import CoffeMachines, CoffePods
+from .serializers import CoffeMachinesSerializer, CoffePodsSerializer, CoffeBeansSerializer
+from rest_framework import viewsets, mixins 
+from rest_framework.response import Response
+from .models import CoffeMachines, CoffePods, CoffeBeans
 import django_filters.rest_framework
+from rest_framework.decorators import action
+import json
+
 # Create your views here.
 def index(request):
     return HttpResponse("""
@@ -28,34 +32,13 @@ class PodsViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            pods_pack_size = int(self.request.query_params.get('pack_size'))
-            coffe_pods = CoffePods.objects.all()
+            body_data = self.request.data.dict()['pack_size']   
+            coffe_beans = CoffeBeans.objects.all()[0]
+            coffe_beans.reduce_coffe_beans(body_data)
+            coffe_beans_serialized = CoffeBeansSerializer(coffe_beans)
+            return Response(coffe_beans_serialized.data)
             
-            
-            if pods_pack_size == 1:
-                coffe_pods.capacity -= 0.5
-                coffe_pods.quantity -= 1
-                coffe_pods.save()
-
-            elif pods_pack_size == 2:
-                coffe_pods.capacity -= 1.0
-                coffe_pods.quantity -= 2
-                coffe_pods.save()
-
-            
-            elif pods_pack_size == 3:
-                coffe_pods.capacity -= 1.5
-                coffe_pods.quantity -= 3
-                coffe_pods.save()
-
-            elif pods_pack_size == 4:
-                coffe_pods.capacity -= 2.0
-                coffe_pods.quantity -= 4
-                coffe_pods.save()
-
         except Exception as e:
             raise e
-
-        return self.create(self, request)
 
    
