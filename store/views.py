@@ -45,7 +45,7 @@ class PodsViewSet(viewsets.ModelViewSet):
 
                 
             coffe_pods = CoffePods(id=coffe_pods_data[0], product_type=coffe_pods_data[1], coffe_flavor = coffe_pods_data[2], pack_size = coffe_pods_data[3])
-            # coffe_pods.save()
+            coffe_pods.save()
             pack_size = coffe_pods_data[3]
 
             try:   

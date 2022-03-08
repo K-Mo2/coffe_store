@@ -85,7 +85,7 @@ class CoffeBeans(models.Model):
         if pods_pack_size.isdigit():
             self.capacity -= float(pods_pack_size) / 2
             self.quantity -= int(pods_pack_size)
-            # self.save() 
+            self.save() 
 
         else:
             raise Exception("The input has to be a valid number")
