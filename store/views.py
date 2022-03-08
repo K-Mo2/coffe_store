@@ -8,6 +8,7 @@ from .models import CoffeMachines, CoffePods, CoffeBeans
 import django_filters.rest_framework
 from rest_framework.decorators import action
 import json
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def index(request):
@@ -29,17 +30,32 @@ class PodsViewSet(viewsets.ModelViewSet):
     serializer_class  = CoffePodsSerializer
     filter_backends   = [django_filters.rest_framework.DjangoFilterBackend]
     filterset_fields  = '__all__'
+    
+    @csrf_exempt
 
     def create(self, request, *args, **kwargs):
         try:
-            coffe_pods_data = list(self.request.data.dict().values())[1:]
+            request_data = request.data
+            
+            if type(request_data) != dict:
+                request_data = list(request_data.dict().values())[1:]
+                coffe_pods_data = request_data
+            else:
+                coffe_pods_data = list(request_data.values())
+
+                
             coffe_pods = CoffePods(id=coffe_pods_data[0], product_type=coffe_pods_data[1], coffe_flavor = coffe_pods_data[2], pack_size = coffe_pods_data[3])
-            coffe_pods.save()
-            body_data = self.request.data.dict()['pack_size']   
-            coffe_beans = CoffeBeans.objects.all()[0]
-            coffe_beans.reduce_coffe_beans(body_data)
-            coffe_beans_serialized = CoffeBeansSerializer(coffe_beans)
-            return Response(coffe_beans_serialized.data)
+            # coffe_pods.save()
+            pack_size = coffe_pods_data[3]
+
+            try:   
+                coffe_beans = CoffeBeans.objects.get(quantity__gt=1)
+                coffe_beans.reduce_coffe_beans(pack_size)
+                coffe_beans_serialized = CoffeBeansSerializer(coffe_beans)
+                return Response(coffe_beans_serialized.data)
+
+            except:
+                raise Exception("Coffe Beans Stock is Empty!")
             
         except Exception as e:
             raise e
