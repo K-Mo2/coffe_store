@@ -32,6 +32,9 @@ class PodsViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
+            coffe_pods_data = list(self.request.data.dict().values())[1:]
+            coffe_pods = CoffePods(id=coffe_pods_data[0], product_type=coffe_pods_data[1], coffe_flavor = coffe_pods_data[2], pack_size = coffe_pods_data[3])
+            coffe_pods.save()
             body_data = self.request.data.dict()['pack_size']   
             coffe_beans = CoffeBeans.objects.all()[0]
             coffe_beans.reduce_coffe_beans(body_data)
