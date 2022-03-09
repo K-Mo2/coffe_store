@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'django_mysql',
-    'store'
+    'store',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
