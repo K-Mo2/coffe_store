@@ -90,7 +90,7 @@ class CoffeBeans(models.Model):
         else:
             raise Exception("The input has to be a valid number")
 
-    def reset_coffe_beans(self):
-        self.capacity = 100
-        self.quantity = 200
+    def reset_coffe_beans(self, capacity, quantity):
+        self.capacity = capacity
+        self.quantity = quantity
         self.save()
