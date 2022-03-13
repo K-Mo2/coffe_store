@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from numbers import Number
 from tabnanny import verbose
 from django.db import models
@@ -54,11 +55,52 @@ class CoffeMachines(models.Model):
 
 
 
+
+class CoffeBeans(models.Model):
+    name      = models.CharField(max_length=50, null=False, default="Brazilian_Beans")
+    capacity  = models.FloatField(validators=[MinValueValidator(0.0)], default=100)
+    quantity  = models.PositiveIntegerField(default=200)
+
+    class Meta:
+        verbose_name_plural = 'Coffe Beans'
+
+    def __str__(self):
+        return f"{self.name} {self.capacity} KG - {self.quantity} Pack"
+
+    
+    def reduce_coffe_beans(self, beans_name, pods_pack_size):
+        
+        if pods_pack_size.isdigit():
+
+            if  "brazilian" in beans_name.lower():
+                self.capacity -= float(pods_pack_size) / 2
+                self.quantity -= int(pods_pack_size)
+                self.save() 
+
+            elif "arab" in beans_name.lower():
+                self.capacity -= float(pods_pack_size) / 2 + 0.5
+                self.quantity -= int(pods_pack_size) + 1
+                self.save()
+            
+            elif "turkish" in beans_name.lower():
+                self.capacity -= float(pods_pack_size) / 2 + 1
+                self.quantity -= int(pods_pack_size) + 2
+                self.save()
+
+        else:
+            raise Exception("The input has to be a valid number")
+
+    def reset_coffe_beans(self, capacity, quantity):
+        self.capacity = capacity
+        self.quantity = quantity
+        self.save()
+
 class CoffePods(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     product_type = models.CharField(max_length=50, choices=pods_product_type_list)
     coffe_flavor = models.CharField(max_length=50, choices=flavors_list)
     pack_size = models.CharField(max_length=50, choices=pack_size_list)
+    beans_type = models.ForeignKey(CoffeBeans, on_delete=models.CASCADE)
     class Meta:
         verbose_name_plural = "Coffe Pods"
         ordering = ['id']
@@ -68,29 +110,3 @@ class CoffePods(models.Model):
         return f"{self.id.upper()} - {self.product_type}, {self.pack_size}, {self.coffe_flavor}"
 
 
-
-class CoffeBeans(models.Model):
-    capacity  = models.FloatField(validators=[MinValueValidator(0.0)], default=100)
-    quantity  = models.PositiveIntegerField(default=200)
-
-    class Meta:
-        verbose_name_plural = 'Coffe Beans'
-
-    def __str__(self):
-        return f"{self.capacity} KG - {self.quantity} Pack"
-
-    
-    def reduce_coffe_beans(self, pods_pack_size):
-        
-        if pods_pack_size.isdigit():
-            self.capacity -= float(pods_pack_size) / 2
-            self.quantity -= int(pods_pack_size)
-            self.save() 
-
-        else:
-            raise Exception("The input has to be a valid number")
-
-    def reset_coffe_beans(self, capacity, quantity):
-        self.capacity = capacity
-        self.quantity = quantity
-        self.save()

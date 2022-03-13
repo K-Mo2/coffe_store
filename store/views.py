@@ -49,8 +49,8 @@ class PodsViewSet(viewsets.ModelViewSet):
             pack_size = coffe_pods_data[3]
 
             try:   
-                coffe_beans = CoffeBeans.objects.get(quantity__gt=1)
-                coffe_beans.reduce_coffe_beans(pack_size)
+                coffe_beans = coffe_pods.beans_type
+                coffe_beans.reduce_coffe_beans(coffe_beans.name ,pack_size)
                 coffe_beans_serialized = CoffeBeansSerializer(coffe_beans)
                 return Response(coffe_beans_serialized.data)
 

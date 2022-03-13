@@ -4,8 +4,8 @@ from .models import CoffeBeans
 
 
 @shared_task
-def reset_coffe_beans(capacity, quantity):
-    coffe_beans = CoffeBeans()
+def reset_coffe_beans(beans_type: str, capacity, quantity):
+    coffe_beans = CoffeBeans.objects.get(name=beans_type)
     coffe_beans.reset_coffe_beans(capacity, quantity)
-    return f"Coffe Beans Stock has been reset successfully!\n Capacity: {coffe_beans.capacity} Quantity: {coffe_beans.quantity}."
+    return f"Coffe Beans Stock has been reset successfully!\n Name: {coffe_beans.name} Capacity: {coffe_beans.capacity} Quantity: {coffe_beans.quantity}."
 

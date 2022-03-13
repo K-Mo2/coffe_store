@@ -16,7 +16,7 @@ app.conf.beat_schedule = {
     'reset-stock-every-day-afternoon': {
         'task': 'store.tasks.reset_coffe_beans',
         'schedule':crontab(hour=12, minute=0) ,
-        'args': (100, 200),
+        'args': ("Brazilian_Beans" ,100, 200),
     },
 }
 
