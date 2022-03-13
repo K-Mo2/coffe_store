@@ -77,7 +77,7 @@ class CoffeBeans(models.Model):
                 self.quantity -= int(pods_pack_size)
                 self.save() 
 
-            elif "arab" in beans_name.lower():
+            elif "arabic" in beans_name.lower():
                 self.capacity -= float(pods_pack_size) / 2 + 0.5
                 self.quantity -= int(pods_pack_size) + 1
                 self.save()
