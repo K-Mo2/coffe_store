@@ -44,13 +44,13 @@ class PodsViewSet(viewsets.ModelViewSet):
                 coffe_pods_data = list(request_data.values())
 
                 
-            coffe_pods = CoffePods(id=coffe_pods_data[0], product_type=coffe_pods_data[1], coffe_flavor = coffe_pods_data[2], pack_size = coffe_pods_data[3])
+            coffe_pods = CoffePods(id=coffe_pods_data[0], product_type=coffe_pods_data[1], coffe_flavor = coffe_pods_data[2], pack_size = coffe_pods_data[3], beans_type = coffe_pods_data[4])
             coffe_pods.save()
             pack_size = coffe_pods_data[3]
 
             try:   
                 coffe_beans = coffe_pods.beans_type
-                coffe_beans.reduce_coffe_beans(coffe_beans.name ,pack_size)
+                coffe_beans.reduce_coffe_beans(pack_size)
                 coffe_beans_serialized = CoffeBeansSerializer(coffe_beans)
                 return Response(coffe_beans_serialized.data)
 
