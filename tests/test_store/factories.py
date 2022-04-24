@@ -31,8 +31,8 @@ class CoffeBeansFactory(DjangoModelFactory):
         model = CoffeBeans
     
     
-    name = 'Brazilian_Beans'
-    capacity = 100
-    quantity = 200
-    consumption = 10
-    depot_val = 200
+        name = 'Brazilian_Beans'
+        capacity = 100
+        quantity = 200
+        consumption = 10
+        depot_val = 200
