@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files%} 
+<link rel="stylesheet" href="{% static "store/store.css" %}" /> 
+{% endblock%} 
+
+{% block title %}
+<title>Coffe Machines</title>
+{%endblock title %} 
+
+{%block body %} 
+{% include './includes/header.html'%}
+
+<h1>This is Coffe Machines Page!</h1>
+
+<form action="/coffe-store/coffe-machines/" method='POST'>
+    {% csrf_token %}
+    <div class='product_card' style="position:relative; left:35vw;">
+        {{form}}
+    </div>
+       <button type='submit' style="position:relative; left:43vw; width:15vw; height:5vh;border-radius:10px;cursor:pointer;">Submit</button>
+</form>
+
+<div class='container'>
+{% for machine in  coffe_machines %}
+    <div class="product_card">
+        ID: {{machine.id}} <br>
+        Type: {{machine.product_type | title}}<br>
+        Water Line Compatible: {{machine.water_line_compatible}}<br>
+        Model Type: {{machine.model_type}}<br>
+    </div>
+    {% endfor %}
+</div>
+{% endblock%}

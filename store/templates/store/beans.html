@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files%} 
+<link rel="stylesheet" href="{% static "store/store.css" %}" /> 
+{% endblock%} 
+
+{% block title %}
+<title>Coffe Beans</title>
+{%endblock title %} 
+
+{%block body %} 
+{% include './includes/header.html'%}
+<h1>This is Coffe Beans Page!</h1>
+
+<form action="/coffe-store/coffe-beans/" method='POST'>
+    {% csrf_token %}
+    <div class='product_card' style="position:relative; left:35vw;">
+        {{form}}
+    </div>
+    <button type='submit' style="position:relative; left:43vw; width:15vw; height:5vh;border-radius:10px;cursor:pointer;">Submit</button>
+</form>
+
+<div class='container'>
+    {% for bean in  coffe_beans %}
+        <div class="product_card">
+            Name: {{bean.name | title}} <br>
+            Capacity: {{bean.capacity | title}}<br>
+            Quantity: {{bean.quantity}}<br>
+            Consumption: {{bean.consumption}}<br>
+            Depot: {{bean.depot_val}}<br>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock%}
