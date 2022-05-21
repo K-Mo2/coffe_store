@@ -1,0 +1,6 @@
+*.md
+*.bak
+*.dat
+*.dir
+__pycache__
+migrations

@@ -1,6 +1,8 @@
+from asyncio.windows_events import NULL
+from numbers import Number
 from tabnanny import verbose
 from django.db import models
-
+from django.core.validators import MinValueValidator
 # Create your models here.
 
 machines_product_type_list = (
@@ -35,6 +37,8 @@ model_type_list = (
     ("2","premium model"),
     ("3","deluxe model"),
 )
+
+
 class CoffeMachines(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     product_type = models.CharField(max_length=50,choices=machines_product_type_list)
@@ -51,12 +55,45 @@ class CoffeMachines(models.Model):
 
 
 
+
+class CoffeBeans(models.Model):
+    name        = models.CharField(max_length=50, null=False, default="Brazilian_Beans")
+    capacity    = models.FloatField(validators=[MinValueValidator(0.0)], default=100)
+    quantity    = models.PositiveIntegerField(default=200)
+    consumption = models.PositiveIntegerField()
+    depot_val   = models.PositiveIntegerField()
+
+    class Meta:
+        verbose_name_plural = 'Coffe Beans'
+
+    def __str__(self):
+        return f"{self.name} {self.capacity} KG - {self.quantity} Pack"
+
+    
+    def reduce_coffe_beans(self, pods_pack_size):
+        
+        if pods_pack_size.isdigit():
+            self.capacity -= (float(pods_pack_size)  +  self.consumption) / 2
+            self.quantity -= int(pods_pack_size) + self.consumption
+            self.save() 
+
+
+        else:
+            raise Exception("The input has to be a valid number")
+
+    
+    def reset_coffe_beans(self):
+        self.capacity = self.depot_val / 2
+        self.quantity = self.depot_val 
+        self.save()
+
 class CoffePods(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     product_type = models.CharField(max_length=50, choices=pods_product_type_list)
     coffe_flavor = models.CharField(max_length=50, choices=flavors_list)
     pack_size = models.CharField(max_length=50, choices=pack_size_list)
-
+    beans_type = models.ForeignKey(CoffeBeans, on_delete=models.CASCADE)
+    
     class Meta:
         verbose_name_plural = "Coffe Pods"
         ordering = ['id']
@@ -64,3 +101,5 @@ class CoffePods(models.Model):
 
     def __str__(self):
         return f"{self.id.upper()} - {self.product_type}, {self.pack_size}, {self.coffe_flavor}"
+
+

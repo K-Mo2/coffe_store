@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files%} 
+<link rel="stylesheet" href="{% static "store/store.css" %}" /> 
+{% endblock%} 
+
+{% block title %}
+<title>Coffe Store</title>
+{%endblock title %} 
+
+{%block body %} 
+{% include './includes/header.html'%}
+<h1>This is Coffe Store Page!</h1>
+
+<ol class='nav_list'>
+  <li><a href="/coffe-store/coffe-machines"><div> Coffe Machines </div></a></li>
+  <li><a href="/coffe-store/coffe-pods"><div> Coffe Pods </div></a></li>
+  <li><a href="/coffe-store/coffe-beans"><div> Coffe Beans </div></a></li>
+</ol>
+{% endblock body %}
